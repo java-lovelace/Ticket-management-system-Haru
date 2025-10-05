@@ -25,6 +25,7 @@ public class Main {
         UserController userController = new UserController(userService);
         TicketController ticketController = new TicketController(ticketService);
         UserRegisterView userRegisterView = new UserRegisterView(userService);
+        TicketListView ticketListView = new TicketListView(ticketController);
         TicketReportView ticketReportView = new TicketReportView(ticketController);
 
         boolean running = true;
@@ -33,6 +34,7 @@ public class Main {
             String[] options = {
                     "Registrar usuario",
                     "Listar usuarios",
+                    "Listar tickets por asignado",
                     "Ver reporte de Top 3 categorías",
                     "Salir"
             };
@@ -54,8 +56,9 @@ public class Main {
                 switch (choice) {
                     case 0 -> userRegisterView.showRegisterForm();
                     case 1 -> userController.listAllUsers();
-                    case 2 -> ticketReportView.showTopCategoriesReport();
-                    case 3 -> running = false;
+                    case 2 -> ticketListView.showTicketsByAssignee();
+                    case 3 -> ticketReportView.showTopCategoriesReport();
+                    case 4 -> running = false;
                     default -> JOptionPane.showMessageDialog(null, "Opción no válida.");
                 }
             }
