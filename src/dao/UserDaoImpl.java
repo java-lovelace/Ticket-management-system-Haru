@@ -39,6 +39,37 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(int id) {
+        String sql = """
+            SELECT u.user_id, u.full_name, u.email,
+                   r.role_id, r.name AS role_name, r.description AS role_description
+            FROM users u
+            JOIN roles r ON u.role_id = r.role_id
+            WHERE u.user_id = ?
+        """;
+
+        try (Connection conn = ConfigDb.openConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Role role = new Role(
+                            rs.getInt("role_id"),
+                            rs.getString("role_name"),
+                            rs.getString("role_description")
+                    );
+                    return new User(
+                            rs.getInt("user_id"),
+                            rs.getString("full_name"),
+                            rs.getString("email"),
+                            role
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error al buscar usuario por ID: " + e.getMessage());
+        }
         return null;
     }
 
