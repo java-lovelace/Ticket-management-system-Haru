@@ -55,7 +55,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Map<String, Integer> getTopCategories(int limit) {
-        return Map.of();
+        return ticketDao.findTopCategories(limit);
     }
 
     @Override
