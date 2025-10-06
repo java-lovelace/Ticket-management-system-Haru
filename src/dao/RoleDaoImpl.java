@@ -2,6 +2,7 @@ package dao;
 
 import domain.Role;
 import config.ConfigDb;
+import javax.swing.JOptionPane;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class RoleDaoImpl implements RoleDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar el rol: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar el rol: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
         return role;
     }
@@ -45,7 +46,7 @@ public class RoleDaoImpl implements RoleDao {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar el rol por nombre: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar el rol por nombre: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
         return role;
     }
@@ -66,7 +67,7 @@ public class RoleDaoImpl implements RoleDao {
                 roles.add(role);
             }
         } catch (SQLException e) {
-            System.out.println("Error al listar los roles: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al listar los roles: " + e.getMessage(), "Error de Listado", JOptionPane.ERROR_MESSAGE);
         }
         return roles;
     }

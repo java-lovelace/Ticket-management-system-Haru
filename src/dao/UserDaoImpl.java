@@ -4,6 +4,7 @@ import config.ConfigDb;
 import domain.Role;
 import domain.User;
 
+import javax.swing.JOptionPane;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class UserDaoImpl implements UserDao {
 
             Role role = roleDao.findByName(user.getRole().getName());
             if (role == null) {
-                // Asignar rol por defecto si no se encuentra (ID 1 = Cliente)
                 role = roleDao.findById(1);
             }
             user.setRole(role);
@@ -38,11 +38,11 @@ public class UserDaoImpl implements UserDao {
                         user.setUserId(rs.getInt(1));
                     }
                 }
-                System.out.println("Usuario registrado correctamente: " + user);
+                JOptionPane.showMessageDialog(null, "Usuario registrado correctamente: " + user, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al registrar el usuario: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al registrar el usuario: " + e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
         }
         return user;
     }
@@ -75,7 +75,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al buscar usuario por id: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar usuario por id: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
         return user;
     }
@@ -108,7 +108,7 @@ public class UserDaoImpl implements UserDao {
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al listar usuarios: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al listar usuarios: " + e.getMessage(), "Error de Listado", JOptionPane.ERROR_MESSAGE);
         }
 
         return users;
@@ -142,7 +142,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al buscar usuario por email: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar usuario por email: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
         return user;
     }

@@ -5,12 +5,10 @@ import dao.*;
 import service.*;
 import view.UserRegisterView;
 
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
         // DAOs
         UserDao userDao = new UserDaoImpl();
         RoleDao roleDao = new RoleDaoImpl();
@@ -22,29 +20,36 @@ public class Main {
         UserController userController = new UserController(userService);
         UserRegisterView userRegisterView = new UserRegisterView(userService);
 
-        int option;
+        String option;
         do {
-            System.out.println("\n Sistema de Tickets ");
-            System.out.println("1. Registrar usuario");
-            System.out.println("2. Listar usuarios");
-            System.out.println("0. Salir");
-            System.out.print("Selecciona una opcion: ");
-            option = scanner.nextInt();
-            scanner.nextLine();
+            option = JOptionPane.showInputDialog(
+                null,
+                "Sistema de Tickets\n" +
+                "1. Registrar usuario\n" +
+                "2. Listar usuarios\n" +
+                "0. Salir\n\n" +
+                "Selecciona una opción:",
+                "Menú Principal",
+                JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (option == null) {
+                option = "0"; // Salir si el usuario cierra el diálogo
+            }
 
             switch (option) {
-                case 1:
+                case "1":
                     userRegisterView.showRegisterForm();
                     break;
-                case 2:
+                case "2":
                     userController.listAllUsers();
                     break;
-                case 0:
-                    System.out.println("Saliendo del sistema...");
+                case "0":
+                    JOptionPane.showMessageDialog(null, "Saliendo del sistema...", "Adiós", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 default:
-                    System.out.println("Opcion no valida.");
+                    JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } while (option != 0);
+        } while (!option.equals("0"));
     }
 }

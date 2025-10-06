@@ -3,6 +3,7 @@ package controller;
 import domain.User;
 import service.UserService;
 
+import javax.swing.JOptionPane;
 import java.util.List;
 
 public class UserController {
@@ -16,16 +17,21 @@ public class UserController {
     public void listAllUsers() {
         List<User> users = userService.getAllUsers();
 
-        if (!users.isEmpty()) {
-            System.out.println("\nLista de usuarios registrados:");
-            for (User user : users) {
-                System.out.println("------------------------------------");
-                System.out.println("ID: " + user.getUserId());
-                System.out.println("Nombre: " + user.getFullName());
-                System.out.println("Email: " + user.getEmail());
-                System.out.println("Rol: " + user.getRole().getName());
-            }
-            System.out.println("------------------------------------");
+        if (users.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay usuarios registrados.", "Lista de Usuarios", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
+
+        StringBuilder userList = new StringBuilder("Lista de usuarios registrados:\n\n");
+        for (User user : users) {
+            userList.append("------------------------------------\n");
+            userList.append("ID: ").append(user.getUserId()).append("\n");
+            userList.append("Nombre: ".concat(user.getFullName())).append("\n");
+            userList.append("Email: ").append(user.getEmail()).append("\n");
+            userList.append("Rol: ").append(user.getRole().getName()).append("\n");
+        }
+        userList.append("------------------------------------\n");
+
+        JOptionPane.showMessageDialog(null, userList.toString(), "Lista de Usuarios", JOptionPane.INFORMATION_MESSAGE);
     }
 }

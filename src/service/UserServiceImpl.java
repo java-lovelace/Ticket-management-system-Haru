@@ -5,6 +5,7 @@ import dao.UserDao;
 import domain.Role;
 import domain.User;
 
+import javax.swing.JOptionPane;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -12,64 +13,44 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final RoleDao roleDao;
 
-    // Inyección de dependencias vía constructor
     public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
         this.roleDao = roleDao;
     }
 
     @Override
-    public User registerUser(String fullName, String email, int RoleId) {
-        // Validaciones básicas
+    public User registerUser(String fullName, String email, int roleId) {
         if (fullName == null || fullName.trim().isEmpty()) {
-            System.out.println("El nombre completo no puede estar vacio.");
+            JOptionPane.showMessageDialog(null, "El nombre completo no puede estar vacío.", "Dato no Válido", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
         if (email == null || !email.contains("@")) {
-            System.out.println("El correo electrónico no es valido.");
+            JOptionPane.showMessageDialog(null, "El correo electrónico no es válido.", "Dato no Válido", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
-        // Buscar el rol
-        Role role = roleDao.findById(RoleId);
+        Role role = roleDao.findById(roleId);
         if (role == null) {
-            System.out.println("Rol no encontrado con ID: " + RoleId);
+            JOptionPane.showMessageDialog(null, "El rol con ID " + roleId + " no existe.", "Dato no Válido", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
-        // Crear el objeto usuario
         User user = new User();
         user.setFullName(fullName.trim());
         user.setEmail(email.trim());
         user.setRole(role);
 
-        // Guardar en la base de datos
-        User createdUser = userDao.create(user);
-        if (createdUser != null && createdUser.getUserId() > 0) {
-            System.out.println("Usuario registrado correctamente.");
-            return createdUser;
-        } else {
-            System.out.println("Error al registrar el usuario.");
-            return null;
-        }
+        return userDao.create(user);
     }
 
     @Override
     public User getUserById(int userId) {
-        return null;
+        return userDao.findById(userId);
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = userDao.findAll();
-
-        if (users.isEmpty()) {
-            System.out.println("No hay usuarios registrados en el sistema.");
-        } else {
-            System.out.println("Usuarios obtenidos correctamente.");
-        }
-
-        return users;
+        return userDao.findAll();
     }
 }
