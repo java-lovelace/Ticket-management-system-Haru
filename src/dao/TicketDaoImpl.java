@@ -5,6 +5,7 @@ import config.ConfigDb;
 import domain.*;
 
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,7 +13,27 @@ import java.util.List;
 import java.util.Map;
 
 public class TicketDaoImpl implements TicketDao {
+    private final StatusDao statusDao = new StatusDaoImpl();
 
+    @Override
+    public void create(Ticket ticket) {
+        String sql = "INSERT INTO tickets (title, description, reporter_id, category_id, status_id) VALUES (?, ?, ?, ?, ?)";
+        try(Connection connection = ConfigDb.openConnection();
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ){
+            Status status = statusDao.findById(ticket.getStatus().getStatusId());
+        }catch(SQLException error){
+            JOptionPane.showMessageDialog(null, "Error al crear el ticket: " + error.getMessage());
+        }
+    }
+
+    @Override
+    public void update(Ticket ticket) {}
+
+    @Override
+    public Ticket findById(int id) {
+        return null;
+    }
 
     @Override
     public List<Ticket> findByStatusAndCategory(String statusName, String categoryName) {
@@ -81,17 +102,6 @@ public class TicketDaoImpl implements TicketDao {
         return tickets;
     }
 
-    //Metodos restantes de la interfaz (aún sin implementar)
-    @Override
-    public void create(Ticket ticket) {}
-
-    @Override
-    public void update(Ticket ticket) {}
-
-    @Override
-    public Ticket findById(int id) {
-        return null;
-    }
 
     @Override
     public List<Ticket> findByAssignee(int assigneeId) {
