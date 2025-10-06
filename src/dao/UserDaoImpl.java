@@ -4,18 +4,27 @@ import config.ConfigDb;
 import domain.Role;
 import domain.User;
 
+import javax.swing.JOptionPane;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
+    private final RoleDao roleDao = new RoleDaoImpl();
+
     @Override
-    public void create(User user) {
+    public User create(User user) {
         String sql = "INSERT INTO users (full_name, email, role_id) VALUES (?, ?, ?)";
 
         try (Connection conn = ConfigDb.openConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            Role role = roleDao.findByName(user.getRole().getName());
+            if (role == null) {
+                role = roleDao.findById(1);
+            }
+            user.setRole(role);
 
             stmt.setString(1, user.getFullName());
             stmt.setString(2, user.getEmail());
@@ -29,48 +38,48 @@ public class UserDaoImpl implements UserDao {
                         user.setUserId(rs.getInt(1));
                     }
                 }
-                System.out.println("Usuario registrado correctamente: " + user);
+                JOptionPane.showMessageDialog(null, "Usuario registrado correctamente: " + user, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al registrar el usuario: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al registrar el usuario: " + e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
         }
+        return user;
     }
 
     @Override
     public User findById(int id) {
-        String sql = """
-            SELECT u.user_id, u.full_name, u.email,
-                   r.role_id, r.name AS role_name, r.description AS role_description
-            FROM users u
-            JOIN roles r ON u.role_id = r.role_id
-            WHERE u.user_id = ?
-        """;
+
+        String sql = "SELECT u.user_id, u.full_name, u.email, " +
+                "r.role_id, r.name AS role_name, r.description AS role_description " +
+                "FROM users u " +
+                "JOIN roles r ON u.role_id = r.role_id " +
+                "WHERE u.user_id = ?";
+        User user = null;
 
         try (Connection conn = ConfigDb.openConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Role role = new Role(
-                            rs.getInt("role_id"),
-                            rs.getString("role_name"),
-                            rs.getString("role_description")
-                    );
-                    return new User(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("email"),
-                            role
-                    );
+                    int userId = rs.getInt("user_id");
+                    String fullName = rs.getString("full_name");
+                    String email = rs.getString("email");
+
+                    int roleId = rs.getInt("role_id");
+                    String roleName = rs.getString("role_name");
+                    String roleDesc = rs.getString("role_description");
+
+                    Role role = new Role(roleId, roleName, roleDesc);
+                    user = new User(userId, fullName, email, role);
                 }
             }
-
         } catch (SQLException e) {
-            System.err.println("❌ Error al buscar usuario por ID: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al buscar usuario por id: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
-        return null;
+        return user;
+
     }
 
     @Override
@@ -101,7 +110,7 @@ public class UserDaoImpl implements UserDao {
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al listar usuarios: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al listar usuarios: " + e.getMessage(), "Error de Listado", JOptionPane.ERROR_MESSAGE);
         }
 
         return users;
@@ -109,6 +118,34 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByEmail(String email) {
-        return null;
+        String sql = "SELECT u.user_id, u.full_name, u.email, " +
+                "r.role_id, r.name AS role_name, r.description AS role_description " +
+                "FROM users u " +
+                "JOIN roles r ON u.role_id = r.role_id " +
+                "WHERE u.email = ?";
+        User user = null;
+
+        try (Connection conn = ConfigDb.openConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int userId = rs.getInt("user_id");
+                    String fullName = rs.getString("full_name");
+                    String userEmail = rs.getString("email");
+
+                    int roleId = rs.getInt("role_id");
+                    String roleName = rs.getString("role_name");
+                    String roleDesc = rs.getString("role_description");
+
+                    Role role = new Role(roleId, roleName, roleDesc);
+                    user = new User(userId, fullName, userEmail, role);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar usuario por email: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
+        }
+        return user;
     }
 }
