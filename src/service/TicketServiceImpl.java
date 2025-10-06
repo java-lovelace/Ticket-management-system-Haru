@@ -60,12 +60,12 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> findTicketsByAssignee(int assigneeId) {
-        return List.of();
+        return ticketDao.findByAssignee(assigneeId);
     }
 
     @Override
     public Map<String, Integer> getTopCategories(int limit) {
-        return Map.of();
+        return ticketDao.findTopCategories(limit);
     }
 
     @Override

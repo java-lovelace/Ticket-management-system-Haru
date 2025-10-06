@@ -11,7 +11,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final RoleDao roleDao;
 
-    // Inyección de dependencias vía constructor
+    // Inyeccion de dependencias via constructor
     public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
         this.roleDao = roleDao;
@@ -29,6 +29,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return List.of();
+        List<User> users = userDao.findAll();
+
+        if (users.isEmpty()) {
+            System.out.println("No hay usuarios registrados en el sistema.");
+        } else {
+            System.out.println("Usuarios obtenidos correctamente.");
+        }
+
+        return users;
     }
 }
