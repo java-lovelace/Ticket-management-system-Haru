@@ -72,7 +72,8 @@ public class TicketController {
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocurrio un error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+        }
+    }
     // --- US 5.3: Top categorías ---
     public Map<String, Integer> getTopCategories(int limit) {
         return ticketService.getTopCategories(limit);

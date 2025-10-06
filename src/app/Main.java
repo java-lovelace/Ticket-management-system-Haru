@@ -36,6 +36,8 @@ public class Main {
                     "Listar usuarios",
                     "Listar tickets por asignado",
                     "Ver reporte de Top 3 categorías",
+                    "Añadir comentario a ticket",
+                    "Buscar tickets por estado y categoría",
                     "Salir"
             };
 
@@ -58,7 +60,9 @@ public class Main {
                     case 1 -> userController.listAllUsers();
                     case 2 -> ticketListView.showTicketsByAssignee();
                     case 3 -> ticketReportView.showTopCategoriesReport();
-                    case 4 -> running = false;
+                    case 4 -> ticketController.addComment();
+                    case 5 -> ticketController.findTicketsByStatusAndCategory();
+                    case 6 -> running = false;
                     default -> JOptionPane.showMessageDialog(null, "Opción no válida.");
                 }
             }
