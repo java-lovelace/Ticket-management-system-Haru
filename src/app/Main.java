@@ -1,55 +1,78 @@
 package app;
 
-import controller.UserController;
+import controller.*;
 import dao.*;
 import service.*;
-import view.UserRegisterView;
+import view.*;
+
 
 import javax.swing.JOptionPane;
+import javax.swing.*;
+
 
 public class Main {
     public static void main(String[] args) {
         // DAOs
         UserDao userDao = new UserDaoImpl();
         RoleDao roleDao = new RoleDaoImpl();
+        TicketDao ticketDao = new TicketDaoImpl();
+        CategoryDao categoryDao = new CategoryDaoImpl();
+        StatusDao statusDao = new StatusDaoImpl();
+        CommentDao commentDao = new CommentDaoImpl();
 
         // Servicios
         UserService userService = new UserServiceImpl(userDao, roleDao);
+        TicketService ticketService = new TicketServiceImpl(ticketDao, userDao, categoryDao, statusDao, commentDao);
 
         // Controladores y vistas
         UserController userController = new UserController(userService);
+        TicketController ticketController = new TicketController(ticketService);
         UserRegisterView userRegisterView = new UserRegisterView(userService);
+        TicketListView ticketListView = new TicketListView(ticketController);
+        TicketReportView ticketReportView = new TicketReportView(ticketController);
 
-        String option;
-        do {
-            option = JOptionPane.showInputDialog(
-                null,
-                "Sistema de Tickets\n" +
-                "1. Registrar usuario\n" +
-                "2. Listar usuarios\n" +
-                "0. Salir\n\n" +
-                "Selecciona una opción:",
-                "Menú Principal",
-                JOptionPane.PLAIN_MESSAGE
+        boolean running = true;
+
+        while (running) {
+            String[] options = {
+                    "Registrar usuario",
+                    "Listar usuarios",
+                    "Listar tickets por asignado",
+                    "Ver reporte de Top 3 categorías",
+                    "Añadir comentario a ticket",
+                    "Buscar tickets por estado y categoría",
+                    "Salir"
+            };
+
+
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "Seleccione una opción:",
+                    "🎟️ Sistema de Tickets",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
             );
 
-            if (option == null) {
-                option = "0"; // Salir si el usuario cierra el diálogo
+            if (choice == -1) { // Si el usuario cierra la ventana
+                running = false;
+            } else {
+                switch (choice) {
+                    case 0 -> userRegisterView.showRegisterForm();
+                    case 1 -> userController.listAllUsers();
+                    case 2 -> ticketListView.showTicketsByAssignee();
+                    case 3 -> ticketReportView.showTopCategoriesReport();
+                    case 4 -> ticketController.addComment();
+                    case 5 -> ticketController.findTicketsByStatusAndCategory();
+                    case 6 -> running = false;
+                    default -> JOptionPane.showMessageDialog(null, "Opción no válida.");
+                }
             }
+        }
 
-            switch (option) {
-                case "1":
-                    userRegisterView.showRegisterForm();
-                    break;
-                case "2":
-                    userController.listAllUsers();
-                    break;
-                case "0":
-                    JOptionPane.showMessageDialog(null, "Saliendo del sistema...", "Adiós", JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } while (!option.equals("0"));
+        JOptionPane.showMessageDialog(null, "👋 Saliendo del sistema...", "Salir", JOptionPane.INFORMATION_MESSAGE);
+
     }
 }

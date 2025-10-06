@@ -49,6 +49,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(int id) {
+
         String sql = "SELECT u.user_id, u.full_name, u.email, " +
                 "r.role_id, r.name AS role_name, r.description AS role_description " +
                 "FROM users u " +
@@ -78,6 +79,7 @@ public class UserDaoImpl implements UserDao {
             JOptionPane.showMessageDialog(null, "Error al buscar usuario por id: " + e.getMessage(), "Error de Búsqueda", JOptionPane.ERROR_MESSAGE);
         }
         return user;
+
     }
 
     @Override
