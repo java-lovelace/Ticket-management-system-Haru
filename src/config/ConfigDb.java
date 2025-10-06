@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConfigDb {
     // Configuración de Supabase
-    private static final String URL = "";
-    private static final String USER = "";
-    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:postgresql://aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require";
+    private static final String USER = "postgres.meaqmuvrwcdxmrywswdr";
+    private static final String PASSWORD = "Qwe.123*";
 
     public static Connection openConnection() {
         Connection conn = null;

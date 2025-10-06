@@ -25,9 +25,9 @@ public class Main {
         int option;
         do {
             System.out.println("\n Sistema de Tickets ");
-            System.out.println("Registrar usuario");
-            System.out.println("Listar usuarios");
-            System.out.println("Salir");
+            System.out.println("1. Registrar usuario");
+            System.out.println("2. Listar usuarios");
+            System.out.println("0. Salir");
             System.out.print("Selecciona una opcion: ");
             option = scanner.nextInt();
             scanner.nextLine();
