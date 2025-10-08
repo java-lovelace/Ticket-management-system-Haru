@@ -31,15 +31,4 @@ public class ConfigDb {
         return conn;
     }
 
-    public static void closeConnection(){
-        Connection objConnection = null;
-        try{
-            if (objConnection != null){
-                objConnection.close();
-                System.out.println("✅ Close succesfully");
-            }
-        }catch (SQLException error){
-            System.out.println("❌ Error"+ error.getMessage());
-        }
-    }
 }
