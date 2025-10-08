@@ -14,6 +14,85 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
+    public void createTicket() {
+        try {
+            String title = JOptionPane.showInputDialog(null, "Ingrese el título del ticket:");
+            String description = JOptionPane.showInputDialog(null, "Ingrese la descripción del ticket:");
+            String reporterIdStr = JOptionPane.showInputDialog(null, "Ingrese su ID de usuario (reportador):");
+            String categoryIdStr = JOptionPane.showInputDialog(null, "Ingrese el ID de la categoría:");
+
+            if (title == null || description == null || reporterIdStr == null || categoryIdStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return;
+            }
+
+            int reporterId = Integer.parseInt(reporterIdStr);
+            int categoryId = Integer.parseInt(categoryIdStr);
+
+            Ticket newTicket = ticketService.createTicket(title, description, reporterId, categoryId);
+
+            if (newTicket != null) {
+                JOptionPane.showMessageDialog(null, "Ticket creado exitosamente con ID: " + newTicket.getTicketId());
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo crear el ticket. Verifique que el usuario y la categoría existan.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: Los IDs deben ser números.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void assignTicket() {
+        try {
+            String ticketIdStr = JOptionPane.showInputDialog(null, "Ingrese el ID del ticket a asignar:");
+            String assigneeIdStr = JOptionPane.showInputDialog(null, "Ingrese el ID del usuario asignado:");
+
+            if (ticketIdStr == null || assigneeIdStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return;
+            }
+
+            int ticketId = Integer.parseInt(ticketIdStr);
+            int assigneeId = Integer.parseInt(assigneeIdStr);
+
+            Ticket updatedTicket = ticketService.assignTicket(ticketId, assigneeId);
+
+            if (updatedTicket != null) {
+                JOptionPane.showMessageDialog(null, "Ticket " + ticketId + " asignado exitosamente al usuario " + assigneeId + ".");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo asignar el ticket. Verifique que el ticket y el usuario existan.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: Los IDs deben ser números.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void changeTicketStatus() {
+        try {
+            String ticketIdStr = JOptionPane.showInputDialog(null, "Ingrese el ID del ticket:");
+            String statusIdStr = JOptionPane.showInputDialog(null, "Ingrese el nuevo ID de estado:");
+
+            int ticketId = Integer.parseInt(ticketIdStr);
+            int statusId = Integer.parseInt(statusIdStr);
+
+            Ticket updatedTicket = ticketService.changeTicketStatus(ticketId, statusId);
+
+            if (updatedTicket != null) {
+                JOptionPane.showMessageDialog(null, "El estado del ticket " + ticketId + " ha sido actualizado.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo cambiar el estado. Verifique que el ticket y el estado existan.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error: Los IDs deben ser números.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public void addComment() {
         try {
             String ticketIdStr = JOptionPane.showInputDialog(null, "Ingrese el ID del Ticket:");
@@ -108,7 +187,7 @@ public class TicketController {
                 System.out.println("  📌 Reportado por: " + t.getReporter().getFullName());
                 System.out.println("  🏷️ Categoría: " + t.getCategory().getName());
                 System.out.println("  🔖 Estado: " + t.getStatus().getName());
-                System.out.println("  📅 Creado: " + t.getCreatedAt());
+                System.out.println("  📅 Creado: " + t.getCreated_at());
                 System.out.println();
             }
 

@@ -14,7 +14,7 @@ public class StatusDaoImpl implements StatusDao {
 
     @Override
     public Status findById(int id) {
-        String sql = "SELECT * FROM statuses WHERE id = ?";
+        String sql = "SELECT * FROM statuses WHERE status_id = ?";
         Status status = null;
         try(Connection connection = ConfigDb.openConnection();
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class StatusDaoImpl implements StatusDao {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Status status = new Status();
-                status.setName(rs.getString("status_id"));
+                status.setStatusId(rs.getInt("status_id"));
                 status.setName(rs.getString("name"));
                 statuses.add(status);
             }

@@ -38,7 +38,6 @@ public class UserDaoImpl implements UserDao {
                         user.setUserId(rs.getInt(1));
                     }
                 }
-                JOptionPane.showMessageDialog(null, "Usuario registrado correctamente: " + user, "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (SQLException e) {

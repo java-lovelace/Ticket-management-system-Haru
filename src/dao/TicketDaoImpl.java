@@ -37,7 +37,6 @@ public class TicketDaoImpl implements TicketDao {
                     throw new SQLException("Creating ticket failed, no ID obtained.");
                 }
             }
-            JOptionPane.showMessageDialog(null, "Ticket creado correctamente con el id: " + ticket.getTicketId());
 
         } catch (SQLException error) {
             JOptionPane.showMessageDialog(null, "Error al crear el ticket: " + error.getMessage());
@@ -62,12 +61,8 @@ public class TicketDaoImpl implements TicketDao {
             pstmt.setInt(5, ticket.getStatus().getStatusId());
             pstmt.setInt(6, ticket.getTicketId());
 
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows > 0) {
-                JOptionPane.showMessageDialog(null, "Ticket actualizado correctamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el ticket para actualizar.");
-            }
+            pstmt.executeUpdate();
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al actualizar el ticket: " + e.getMessage());
         }
@@ -97,8 +92,8 @@ public class TicketDaoImpl implements TicketDao {
                     ticket.setTicketId(rs.getInt("ticket_id"));
                     ticket.setTitle(rs.getString("title"));
                     ticket.setDescription(rs.getString("description"));
-                    ticket.setCreatedAt(rs.getTimestamp("created_at"));
-                    ticket.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    ticket.setCreated_at(rs.getTimestamp("created_at"));
+                    ticket.setUpdated_at(rs.getTimestamp("updated_at"));
 
                     User reporter = new User();
                     reporter.setUserId(rs.getInt("reporter_id"));
@@ -157,8 +152,8 @@ public class TicketDaoImpl implements TicketDao {
                     ticket.setTicketId(rs.getInt("ticket_id"));
                     ticket.setTitle(rs.getString("title"));
                     ticket.setDescription(rs.getString("description"));
-                    ticket.setCreatedAt(rs.getTimestamp("created_at"));
-                    ticket.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    ticket.setCreated_at(rs.getTimestamp("created_at"));
+                    ticket.setUpdated_at(rs.getTimestamp("updated_at"));
 
                     User reporter = new User();
                     reporter.setUserId(rs.getInt("reporter_id"));
@@ -246,8 +241,8 @@ public class TicketDaoImpl implements TicketDao {
                     ticket.setAssignee(assignee);
                     ticket.setCategory(category);
                     ticket.setStatus(status);
-                    ticket.setCreatedAt(rs.getTimestamp("created_at"));
-                    ticket.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    ticket.setCreated_at(rs.getTimestamp("created_at"));
+                    ticket.setUpdated_at(rs.getTimestamp("updated_at"));
 
                     tickets.add(ticket);
                 }

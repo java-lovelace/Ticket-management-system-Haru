@@ -38,7 +38,7 @@ public class TicketListView {
                             .append("  📌 Reportado por: ").append(t.getReporter().getFullName()).append("\n")
                             .append("  🏷️ Categoría: ").append(t.getCategory().getName()).append("\n")
                             .append("  🔖 Estado: ").append(t.getStatus().getName()).append("\n")
-                            .append("  📅 Creado: ").append(t.getCreatedAt()).append("\n\n");
+                            .append("  📅 Creado: ").append(t.getCreated_at()).append("\n\n");
                 }
             }
 
