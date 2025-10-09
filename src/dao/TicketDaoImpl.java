@@ -27,14 +27,14 @@ public class TicketDaoImpl implements TicketDao {
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Creating ticket failed, no rows affected.");
+                throw new SQLException("La creación del ticket falló, no se afectaron filas.");
             }
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     ticket.setTicketId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating ticket failed, no ID obtained.");
+                    throw new SQLException("La creación del ticket falló, no se obtuvo ningún ID.");
                 }
             }
 
@@ -183,7 +183,7 @@ public class TicketDaoImpl implements TicketDao {
                 }
             }
         } catch (SQLException e) {
-            System.err.println(" Error al buscar tickets: " + e.getMessage());
+            System.err.println("Error al buscar tickets: " + e.getMessage());
         }
 
         return tickets;

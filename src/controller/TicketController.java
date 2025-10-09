@@ -153,7 +153,7 @@ public class TicketController {
             JOptionPane.showMessageDialog(null, "Ocurrio un error al buscar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    // --- US 5.3: Top categorías ---
+
     public Map<String, Integer> getTopCategories(int limit) {
         return ticketService.getTopCategories(limit);
     }
@@ -170,7 +170,7 @@ public class TicketController {
         }
     }
 
-    // --- US 5.2: Listar tickets por asignado ---
+
     public List<Ticket> getTicketsByAssignee(int assigneeId) {
         return ticketService.findTicketsByAssignee(assigneeId);
     }

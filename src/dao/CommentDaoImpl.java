@@ -29,7 +29,6 @@ public class CommentDaoImpl implements CommentDao {
             System.out.println(" Comentario creado exitosamente.");
 
         } catch (SQLException e) {
-            // 5. Si ocurre un error, lo imprimimos en la consola.
             System.err.println("Error al crear el comentario: " + e.getMessage());
         }
     }
