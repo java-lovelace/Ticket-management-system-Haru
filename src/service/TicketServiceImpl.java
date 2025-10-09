@@ -48,7 +48,6 @@ public class TicketServiceImpl implements TicketService {
     public Ticket createTicket(String title, String description, int reporterId, int categoryId) {
         User reporter = userDao.findById(reporterId);
         if (reporter == null) {
-            // Opcional: lanzar una excepción personalizada
             System.err.println("Error: El usuario reportador con ID " + reporterId + " no existe.");
             return null;
         }
